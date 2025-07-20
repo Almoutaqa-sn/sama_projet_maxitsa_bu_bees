@@ -1,0 +1,25 @@
+{
+    "name": "baye-leyty-mountakha/projet",
+    "autoload": {
+        "psr-4": {
+            "Src\\Entity\\":"src/entity/",
+            "App\\Core\\Abstract\\":"app/core/abstract/",
+            "App\\Core\\":"app/core/",
+            "Src\\Controller\\":"src/controller/",
+            "Src\\Service\\":"src/service/",
+            "Src\\Repository\\":"src/repository/"
+        
+        }
+    },
+    "authors": [
+        {
+            "name": "Almountakha92",
+            "email": "seneleyty113@gmail.com"
+        }
+    ],
+    "require": {},
+    "script":{
+        "database:migrate":"php migrations/migration.php",
+        "database:seeder":"php seeders/seeder.php"
+    }
+}
