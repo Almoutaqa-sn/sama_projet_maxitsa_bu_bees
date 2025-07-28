@@ -55,11 +55,11 @@ class CompteController extends AbstractController
         $userId = (Users::toObject($this->session->get('user')))->getId();
         
         $solde = $this->compteService->getSoldeByUserIdComptePrincipale($userId);
-        // var_dump($solde);
-        // die();
+      
         
         $this->session->set('solde', $solde);
         $this->render("accueil/accueil");
+       
         
 
 
