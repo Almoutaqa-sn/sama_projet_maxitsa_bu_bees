@@ -1,8 +1,9 @@
-# Utiliser l'image officielle PHP avec Apache
-FROM php:8.2-apache
+# Utiliser l'image officielle PHP-FPM
+FROM php:8.2-fpm
 
-# Installer les extensions PHP nécessaires
+# Installer Nginx et les extensions PHP nécessaires
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
     curl \
     libpng-dev \
@@ -13,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Installer Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
@@ -24,12 +25,8 @@ COPY . /var/www/html/
 # Installer les dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Configurer Apache pour pointer vers le dossier public
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Activer mod_rewrite pour les URL propres
-RUN a2enmod rewrite
+# Configurer Nginx
+COPY nginx.conf /etc/nginx/sites-available/default
 
 # Donner les permissions appropriées
 RUN chown -R www-data:www-data /var/www/html \
@@ -38,5 +35,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Exposer le port 80
 EXPOSE 80
 
-# Démarrer Apache
-CMD ["apache2-foreground"]
+# Script de démarrage pour Nginx et PHP-FPM
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Démarrer Nginx et PHP-FPM
+CMD ["/start.sh"]
