@@ -21,10 +21,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 # Copier les fichiers du projet
-COPY . /var/www/html/
-
-# S'assurer que le fichier .env est présent
-COPY .env /var/www/html/.env 
+COPY . /var/www/html/ 
 
 # Installer les dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
@@ -38,6 +35,9 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # Exposer le port 80
 EXPOSE 80
+
+# Variables d'environnement pour la production
+ENV ENVIRONMENT=production
 
 # Script de démarrage pour Nginx et PHP-FPM
 COPY start.sh /start.sh
