@@ -15,7 +15,7 @@ class UsersRepository{
 
     public function selectByLoginAndPassword($login,$password) : ?Users {
         try {
-               $sql='Select * from "user" where  login= :login and password= :password';
+               $sql='Select * from "utilisateur" where  login= :login and password= :password';
                
                $stmt=$this->db->pdo->prepare($sql);
                $stmt->execute([

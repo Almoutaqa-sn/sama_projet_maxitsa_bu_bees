@@ -5,17 +5,17 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // Chargement de .env
 $env = parse_ini_file(__DIR__ . '/../.env');
 
-$driver = $env['DB_DRIVER'];
-$host = $env['DB_HOST'];
-$port = $env['DB_PORT'];
-$dbname = $env['DB_NAME'];
-$user = $env['DB_USER'];
-$pass = $env['DB_PASSWORD'];
+// $driver = $env['DB_DRIVER'];
+// $host = $env['DB_HOST'];
+// $port = $env['DB_PORT'];
+// $dbname = $env['DB_NAME'];
+// $user = $env['DB_USER'];
+// $pass = $env['DB_PASSWORD'];
 
-$dsn = "$driver:host=$host;port=$port;dbname=$dbname";
+$dsn = "pgsql:host=shortline.proxy.rlwy.net;dbname=railway;port=47328";
 
 try {
-    $pdo = new PDO($dsn, $user, $pass);
+    $pdo = new PDO($dsn, 'postgres', 'DYBsSMFfOljPDyjXRbGqZdVLsTwXQMrt');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     echo "✅ Connexion à la base de données réussie.\n";
@@ -28,7 +28,7 @@ try {
     ON CONFLICT DO NOTHING;");
 
     // Utilisateurs
-    $pdo->exec("INSERT INTO \"user\" (nom, prenom, adresse, numero_carte_identite, photo_recto, photo_verso, password, type_id, login) VALUES
+    $pdo->exec("INSERT INTO \"utilisateur\" (nom, prenom, adresse, numero_carte_identite, photo_recto, photo_verso, password, type_id, login) VALUES
         ('Sene', 'Baye', 'Dakar', 'CNI12345', 'recto.jpg', 'verso.jpg', 'pass123', 1, 'bayeadmin'),
         ('Diop', 'Fatou', 'Thiès', 'CNI67890', 'recto2.jpg', 'verso2.jpg', 'pass456', 2, 'fatouclient')
     ON CONFLICT DO NOTHING;");

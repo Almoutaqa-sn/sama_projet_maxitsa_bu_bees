@@ -9,9 +9,10 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libpq-dev \
     zip \
     unzip \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo_mysql pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
 # Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -20,7 +21,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 # Copier les fichiers du projet
-COPY . /var/www/html/ 
+COPY . /var/www/html/
+
+# S'assurer que le fichier .env est présent
+COPY .env /var/www/html/.env 
 
 # Installer les dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
