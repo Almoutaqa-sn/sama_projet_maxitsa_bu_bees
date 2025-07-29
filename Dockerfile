@@ -37,12 +37,12 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE 80
 
 # Variables d'environnement par défaut (seront surchargées par Render)
-ENV DB_HOST=localhost
-ENV DB_PORT=5432
-ENV DB_NAME=sama_base_de_donnees
-ENV DB_USER=postgres
-ENV DB_PASSWORD=admin123
-ENV ENVIRONMENT=production
+# ENV DB_HOST=localhost
+# ENV DB_PORT=5432
+# ENV DB_NAME=sama_base_de_donnees
+# ENV DB_USER=postgres
+# ENV DB_PASSWORD=admin123
+# ENV ENVIRONMENT=production
 
 # Script de démarrage pour Nginx et PHP-FPM
 COPY start.sh /start.sh
