@@ -10,14 +10,14 @@ class Database{
 
 
     private function __construct(){
-        // Charger les variables d'environnement depuis le fichier .env
+        // Charger les variables d'environnement depuis le fichier .env (en local) ou depuis l'environnement système (en production)
         $this->loadEnv();
         
-        $host = $_ENV['DB_HOST'] ?? 'localhost';
-        $port = $_ENV['DB_PORT'] ?? '5432';
-        $dbname = $_ENV['DB_NAME'] ?? 'sama_base_de_donnees';
-        $user = $_ENV['DB_USER'] ?? 'postgres';
-        $password = $_ENV['DB_PASSWORD'] ?? 'admin123';
+        $host = $this->getEnvVar('DB_HOST', 'localhost');
+        $port = $this->getEnvVar('DB_PORT', '5432');
+        $dbname = $this->getEnvVar('DB_NAME', 'sama_base_de_donnees');
+        $user = $this->getEnvVar('DB_USER', 'postgres');
+        $password = $this->getEnvVar('DB_PASSWORD', 'admin123');
         
         $dsn = "pgsql:host={$host};port={$port};dbname={$dbname};";
         
@@ -29,6 +29,11 @@ class Database{
         }
     }
 
+    private function getEnvVar(string $name, string $default = ''): string {
+        // Priorité : variables d'environnement système > $_ENV > valeur par défaut
+        return getenv($name) ?: ($_ENV[$name] ?? $default);
+    }
+
     private function loadEnv() {
         $envFile = __DIR__ . '/../../.env';
         if (file_exists($envFile)) {
@@ -37,8 +42,10 @@ class Database{
                 if (strpos(trim($line), '#') === 0) {
                     continue;
                 }
-                list($name, $value) = explode('=', $line, 2);
-                $_ENV[trim($name)] = trim($value);
+                if (strpos($line, '=') !== false) {
+                    list($name, $value) = explode('=', $line, 2);
+                    $_ENV[trim($name)] = trim($value);
+                }
             }
         }
     }

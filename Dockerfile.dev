@@ -20,8 +20,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers du projet (sans .env)
-COPY . /var/www/html/
+# Copier les fichiers du projet
+COPY . /var/www/html/ 
 
 # Installer les dépendances Composer
 RUN composer install --no-dev --optimize-autoloader
@@ -36,12 +36,7 @@ RUN chown -R www-data:www-data /var/www/html \
 # Exposer le port 80
 EXPOSE 80
 
-# Variables d'environnement par défaut (seront surchargées par Render)
-ENV DB_HOST=localhost
-ENV DB_PORT=5432
-ENV DB_NAME=sama_base_de_donnees
-ENV DB_USER=postgres
-ENV DB_PASSWORD=admin123
+# Variables d'environnement pour la production
 ENV ENVIRONMENT=production
 
 # Script de démarrage pour Nginx et PHP-FPM
