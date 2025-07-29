@@ -98,6 +98,21 @@ class Users  extends AbstractEntity {
     return $user;
 }
 
+public function getTelephones(): array
+{
+    return $this->telephones;
+}
+
+public function setTelephones(array $telephones): void
+{
+    $this->telephones = $telephones;
+}
+
+public function addTelephone($telephone): void
+{
+    $this->telephones[] = $telephone;
+}
+
 public function toArray(): array
 {
     return [
@@ -110,9 +125,9 @@ public function toArray(): array
         'numerocni' => $this->numerocni,
         'photocnirecto' => $this->photocnirecto,
         'photocniverso' => $this->photocniverso,
-        'telephones' => is_array($this->telephone)
-            ? array_map(fn($tel) => $tel->toArray(), $this->telephone)
-            : $this->telephone
+        'telephones' => is_array($this->telephones)
+            ? array_map(fn($tel) => $tel->toArray(), $this->telephones)
+            : $this->telephones
     ];
 }
 
